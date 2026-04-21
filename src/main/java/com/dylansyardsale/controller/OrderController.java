@@ -58,14 +58,10 @@ public class OrderController {
         }
         
         order.setItems(items);
-        
-        // Save first to generate the auto-increment ID
+
+        // COPILOT NOTE: removed shipping QR assignment; order is identified by DB id
         Order savedOrder = orderRepository.save(order);
-        
-        // ABOVE AND BEYOND PART: ADDED BY GOOGLE - Generating a dynamic Shipping QR code based on the generated Database ID
-        savedOrder.setQrCode("SHIP-" + savedOrder.getId());
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderRepository.save(savedOrder));
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
     @PutMapping("/{id}") //REQUIRED
@@ -74,7 +70,7 @@ public class OrderController {
             .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + id));
         order.setStatus(updated.getStatus());
         order.setPackagingCost(updated.getPackagingCost());
-        order.setQrCode(updated.getQrCode());
+        // COPILOT NOTE: removed order.setQrCode(...) because using id only
         return ResponseEntity.ok(orderRepository.save(order));
     }
 
@@ -90,13 +86,11 @@ public class OrderController {
 
 // ABOVE AND BEYOND PART: ADDED BY GOOGLE - Request DTO for clean Swagger JSON input
 class OrderRequest {
-    private String qrCode;
+    // COPILOT NOTE: removed qrCode from request body (id-based flow now)
     private OrderStatus status;
     private Double packagingCost;
     private List<Long> productIds;
 
-    public String getQrCode() { return qrCode; }
-    public void setQrCode(String qrCode) { this.qrCode = qrCode; }
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
     public Double getPackagingCost() { return packagingCost; }
