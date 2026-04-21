@@ -7,30 +7,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
-// Order is a required entity //REQUIRED
-// Demonstrates one-to-many //REQUIRED
-@Entity //REQUIRED
-@Table(name = "orders") //REQUIRED
+// Order is a required entity //REQUIRED - Core business entity representing a customer purchase transaction.
+// Demonstrates one-to-many //REQUIRED - One Order can contain multiple OrderItem rows.
+@Entity //REQUIRED - Marks this class as a JPA entity mapped to a database table.
+@Table(name = "orders") //REQUIRED - Uses explicit table name to avoid reserved-word and naming issues.
 public class Order {
-    @Id //REQUIRED
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED
-    private Long id; //REQUIRED
+    @Id //REQUIRED - Primary key for the orders table.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED - Uses MySQL auto-increment identity strategy.
+    private Long id; //REQUIRED - Unique database identifier for each order.
 
-    private String qrCode; // Fake value for demo //REQUIRED
-    private LocalDateTime orderDate;
+    private String qrCode; //REQUIRED - Demo shipping/tracking identifier shown in API responses.
+    private LocalDateTime orderDate; // Timestamp of when the order was created.
 
-    @PositiveOrZero
+    @PositiveOrZero // Validation: packaging cost cannot be negative.
     private Double packagingCost;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
+    @NotNull // Validation: every order must have a valid status.
+    @Enumerated(EnumType.STRING) // Stores enum as readable string (PROCESSING/SHIPPED/COMPLETED).
     private OrderStatus status;
 
-    // One-to-many: Order -> OrderItem //REQUIRED
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //REQUIRED
+    // One-to-many: Order -> OrderItem //REQUIRED - Child rows belong to this parent order.
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //REQUIRED - Persist/update/delete OrderItem rows with the parent Order.
     private List<OrderItem> items = new ArrayList<>();
 
-    public Order() {} //REQUIRED
+    public Order() {} //REQUIRED - Required no-arg constructor for JPA.
 
     public Long getId() { return id; }
     public String getQrCode() { return qrCode; }
