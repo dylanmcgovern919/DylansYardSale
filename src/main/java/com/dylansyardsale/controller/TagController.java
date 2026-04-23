@@ -9,32 +9,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RestController //REQUIRED
-@RequestMapping("/api/tags") //REQUIRED
+@RestController //MUST-Tells Spring this class handles REST API requests and returns JSON responses.
+@RequestMapping("/api/tags") //MUST-Base URL so every endpoint here starts with /api/tags.
 public class TagController {
     private final TagRepository tagRepository;
     public TagController(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
 
-    @GetMapping //REQUIRED
+    @GetMapping //MUST-Gets all tags from the database and returns them as a list.
     public ResponseEntity<List<Tag>> getAll() {
         return ResponseEntity.ok(tagRepository.findAll());
     }
 
-    @GetMapping("/{id}") //REQUIRED
+    @GetMapping("/{id}") //MUST-Gets one tag by ID.
     public ResponseEntity<Tag> getOne(@PathVariable Long id) {
         Tag tag = tagRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Tag not found: " + id));
         return ResponseEntity.ok(tag);
     }
 
-    @PostMapping //REQUIRED
+    @PostMapping //MUST-Creates a new tags.
     public ResponseEntity<Tag> create(@Valid @RequestBody Tag tag) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tagRepository.save(tag));
     }
 
-    @PutMapping("/{id}") //REQUIRED
+    @PutMapping("/{id}") //MUST-Updates an existing tag.
     public ResponseEntity<Tag> update(@PathVariable Long id, @Valid @RequestBody Tag updated) {
         Tag tag = tagRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Tag not found: " + id));
@@ -42,7 +42,7 @@ public class TagController {
         return ResponseEntity.ok(tagRepository.save(tag));
     }
 
-    @DeleteMapping("/{id}") //REQUIRED
+    @DeleteMapping("/{id}") //MUST-Deletes a tag by ID. 
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!tagRepository.existsById(id)) {
             throw new ResourceNotFoundException("Tag not found: " + id);
