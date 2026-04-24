@@ -99,6 +99,7 @@ public class OrderController {
 
 //Includes fields for the order status, packaging cost, and a list of items to be included in the order.  
 class OrderRequest {
+    @NotNull // Validation: status is required and must be a valid OrderStatus value.
     private OrderStatus status;
     private Double packagingCost;
 
@@ -118,6 +119,7 @@ class OrderItemRequest {
     @NotNull
     private Long productId;
 
+    @NotNull // Validation: quantity is required.
     @Positive 
     private Integer quantity;
 

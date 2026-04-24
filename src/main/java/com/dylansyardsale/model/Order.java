@@ -1,5 +1,6 @@
 package com.dylansyardsale.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  //REQUIRED - Core business entity representing a customer purchase transaction.
  //REQUIRED - One Order can contain multiple OrderItem rows.
 @Entity //REQUIRED - Marks this class as a JPA entity mapped to a database table.
-@Table(name = "orders") //REQUIRED - Uses explicit table name to avoid reserved-word and naming issues.
+@Table(name = "orders", indexes = @Index(name = "idx_orders_status", columnList = "status")) //REQUIRED - Uses explicit table name; index on status optimizes filter queries.
 public class Order {
     @Id //REQUIRED - Primary key for the orders table.
     @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED - Uses MySQL auto-increment identity strategy.
@@ -28,6 +29,7 @@ public class Order {
 
     // One-to-many: Order -> OrderItem //REQUIRED - Child rows belong to this parent order.
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //REQUIRED - Persist/update/delete OrderItem rows with the parent Order.
+    @JsonManagedReference // Serializes items list; prevents infinite recursion with OrderItem.order.
     private List<OrderItem> items = new ArrayList<>();
 
     public Order() {} //REQUIRED - Required no-arg constructor for JPA.

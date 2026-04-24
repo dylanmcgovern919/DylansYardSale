@@ -1,5 +1,6 @@
 package com.dylansyardsale.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ public class OrderItem {
     // many order items belong to one order
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference // Back side of the managed reference; omitted from JSON to prevent infinite recursion.
     private Order order;
 
     // many order items can reference one product
