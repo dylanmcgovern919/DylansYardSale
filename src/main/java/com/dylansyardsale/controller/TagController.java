@@ -31,10 +31,10 @@ public class TagController {
 
     @PostMapping //MUST-Creates a new tag.
     public ResponseEntity<Tag> create(@Valid @RequestBody Tag tag) {
-        // Prevent duplicate tags by name
+        // ADDED NOTE: Prevent duplicate tags by name
         Tag existing = tagRepository.findByName(tag.getName());
         if (existing != null) {
-            return ResponseEntity.ok(existing); // Return existing tag if duplicate name is requested
+            return ResponseEntity.ok(existing); // ADDED NOTE: Return existing tag if duplicate name is requested
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(tagRepository.save(tag));
     }

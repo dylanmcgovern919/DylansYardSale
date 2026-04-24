@@ -10,7 +10,7 @@ public class Product {
 
     @Id //REQUIRED
     @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED
-    private Long id; //REQUIRED - DB-generated ID for each item 
+    private Long id; //REQUIRED - DB-generated ID for each item (replaces QR usage)
 
     private String name; //REQUIRED (domain field)
     private String description; //REQUIRED (domain field)
@@ -19,7 +19,7 @@ public class Product {
     @Enumerated(EnumType.STRING) //REQUIRED
     private ProductCategory category; //REQUIRED
 
-    //Kept because your existing constructor/DataLoader uses genre text.
+    // COPILOT NOTE: Kept because your existing constructor/DataLoader uses genre text.
     private String genre;
 
     // REQUIRED: many-to-many relationship (Product <-> Tag)
@@ -33,7 +33,7 @@ public class Product {
 
     public Product() {} //REQUIRED by JPA
 
-    // Matches your existing DataLoader constructor calls.
+    // COPILOT NOTE: Matches your existing DataLoader constructor calls.
     public Product(String name, String description, Double price, ProductCategory category, String genre) {
         this.name = name;
         this.description = description;
