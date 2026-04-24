@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
-// Order is a required entity //REQUIRED - Core business entity representing a customer purchase transaction.
-// Demonstrates one-to-many //REQUIRED - One Order can contain multiple OrderItem rows.
+ //REQUIRED - Core business entity representing a customer purchase transaction.
+ //REQUIRED - One Order can contain multiple OrderItem rows.
 @Entity //REQUIRED - Marks this class as a JPA entity mapped to a database table.
 @Table(name = "orders") //REQUIRED - Uses explicit table name to avoid reserved-word and naming issues.
 public class Order {
@@ -16,7 +16,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED - Uses MySQL auto-increment identity strategy.
     private Long id; //REQUIRED - Unique database identifier for each order.
 
-    // CHANGED NOTE: qrCode removed to keep id-based flow consistent across model/controller.
+    
     private LocalDateTime orderDate; // Timestamp of when the order was created.
 
     @PositiveOrZero // Validation: packaging cost cannot be negative.

@@ -65,7 +65,7 @@ public class ProductController {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
 
-        // ADDED NOTE: Basic input validation for tagName
+        //Basic input validation for tagName
         if (tagName == null || tagName.trim().isEmpty()) {
             throw new IllegalArgumentException("tagName must not be blank");
         }
@@ -73,7 +73,7 @@ public class ProductController {
         Tag tag = tagRepository.findByName(tagName.trim());
         if (tag == null) tag = tagRepository.save(new Tag(tagName.trim()));
 
-        // ADDED NOTE: Set prevents duplicates, but this check improves clarity of intent
+        //Set to stop duplicates, and this extra check just makes it more clear what I’m trying to do.
         if (!product.getTags().contains(tag)) {
             product.getTags().add(tag);
         }
@@ -81,7 +81,7 @@ public class ProductController {
         return ResponseEntity.ok(productRepository.save(product));
     }
 
-    @GetMapping("/{id}/tags") // ADDED NOTE: Added endpoint to retrieve tags for one product
+    @GetMapping("/{id}/tags") //  Added endpoint to retrieve tags for one product
     public ResponseEntity<Set<Tag>> getProductTags(@PathVariable Long id) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));

@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
         Map<String, String> body = new HashMap<>();
         body.put("error", "Validation failed");
 
-        // CHANGED NOTE: null-safe field error access so handler never throws NPE
+        // null-safe field error access so handler never throws NPE
         String detail = (ex.getBindingResult().getFieldError() != null)
                 ? ex.getBindingResult().getFieldError().getDefaultMessage()
                 : "Request body validation failed";
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class) // ADDED NOTE: handles manual input guards in controllers
+    @ExceptionHandler(IllegalArgumentException.class) // handles manual input guards in controllers
     public ResponseEntity<Map<String, String>> handleIllegalArgument(IllegalArgumentException ex) {
         Map<String, String> body = new HashMap<>();
         body.put("error", "Invalid request");

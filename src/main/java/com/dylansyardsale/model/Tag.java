@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "tags") //notes: Added explicit table name so Hibernate maps this entity to "tags" (not inferred "tag"), preventing FK mismatch errors.
+@Table(name = "tags") 
 public class Tag {
 
     @Id
@@ -19,7 +19,7 @@ public class Tag {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "tags")
-    private Set<Product> products = new HashSet<>(); //notes: Keeps inverse side of many-to-many with Product; no schema name change needed here.
+    private Set<Product> products = new HashSet<>(); // Keeps inverse side of many-to-many with Product; no schema name change needed here.
 
     public Tag() {}
 

@@ -39,7 +39,7 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-    @GetMapping("/status/{status}") // ADDED NOTE: Added filter endpoint from code review suggestion
+    @GetMapping("/status/{status}") // Added a new filter endpoint so users only get items that match what they choose, instead of getting everything.
     public ResponseEntity<List<Order>> getByStatus(@PathVariable OrderStatus status) {
         List<Order> filtered = orderRepository.findAll().stream()
             .filter(o -> o.getStatus() == status)
@@ -49,7 +49,7 @@ public class OrderController {
 
     @PostMapping //MUST-Creates a new order in the database and returns the created order.
     public ResponseEntity<Order> create(@Valid @RequestBody OrderRequest request) { //DELETE-COMPLEX ORDER CODE SECTION
-        // ADDED NOTE: Explicit guard to prevent creating empty orders
+        // Explicit guard to prevent creating empty orders
         if (request.getItems() == null || request.getItems().isEmpty()) {
             throw new IllegalArgumentException("Order must contain at least one item.");
         }
@@ -61,7 +61,6 @@ public class OrderController {
 
         //Logic to map Product IDs to specific OrderItems in the database
         List<OrderItem> items = new ArrayList<>();
-        // CHANGED NOTE: request now accepts item objects (productId + quantity), not only productIds
         for (OrderItemRequest itemRequest : request.getItems()) {
             Product product = productRepository.findById(itemRequest.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + itemRequest.getProductId()));
@@ -75,7 +74,6 @@ public class OrderController {
         
         order.setItems(items);
 
-        // COPILOT NOTE: removed shipping QR assignment; order is identified by DB id
         Order savedOrder = orderRepository.save(order);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
@@ -86,7 +84,6 @@ public class OrderController {
             .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + id));
         order.setStatus(updated.getStatus());
         order.setPackagingCost(updated.getPackagingCost());
-        // COPILOT NOTE: removed order.setQrCode(...) because using id only
         return ResponseEntity.ok(orderRepository.save(order));
     }
 
@@ -102,12 +99,11 @@ public class OrderController {
 
 //Includes fields for the order status, packaging cost, and a list of items to be included in the order.  
 class OrderRequest {
-    // COPILOT NOTE: removed qrCode from request body (id-based flow now)
     private OrderStatus status;
     private Double packagingCost;
 
-    @NotEmpty // ADDED NOTE: Enforces at least one order item
-    private List<OrderItemRequest> items; // CHANGED NOTE: Replaced productIds with item DTO including quantity
+    @NotEmpty // Enforces at least one order item
+    private List<OrderItemRequest> items; //Replaced productIds with item DTO including quantity
 
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
@@ -117,12 +113,12 @@ class OrderRequest {
     public void setItems(List<OrderItemRequest> items) { this.items = items; }
 }
 
-// ADDED NOTE: New DTO to support quantity per product in order creation
+// DTO to support quantity per product in order creation
 class OrderItemRequest {
-    @NotNull // ADDED NOTE: productId is required
+    @NotNull
     private Long productId;
 
-    @Positive // ADDED NOTE: quantity must be greater than zero
+    @Positive 
     private Integer quantity;
 
     public Long getProductId() { return productId; }
