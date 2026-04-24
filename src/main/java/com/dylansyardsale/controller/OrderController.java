@@ -18,13 +18,15 @@ import java.util.List;
 @RequestMapping("/api/orders") //MUST-Defines the base URL for all end points in this controller, which will be /api/orders
 public class OrderController {
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     
     //Added ProductRepository to look up products when building order items.
     private final ProductRepository productRepository;
     //Gives Spring the repositories this controller depends on.
-    public OrderController(OrderRepository orderRepository, ProductRepository productRepository) {
+    public OrderController(OrderRepository orderRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @GetMapping //MUST-Gets all orders from the database and returns every order in the database.
@@ -45,6 +47,15 @@ public class OrderController {
             .filter(o -> o.getStatus() == status)
             .toList();
         return ResponseEntity.ok(filtered);
+    }
+
+    @GetMapping("/{id}/items") // Uses OrderItemRepository to fetch all items belonging to a specific order.
+    public ResponseEntity<List<OrderItem>> getItemsByOrder(@PathVariable Long id) {
+        if (!orderRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Order not found: " + id);
+        }
+        List<OrderItem> items = orderItemRepository.findByOrderId(id);
+        return ResponseEntity.ok(items);
     }
 
     @PostMapping //MUST-Creates a new order in the database and returns the created order.
@@ -99,6 +110,7 @@ public class OrderController {
 
 //Includes fields for the order status, packaging cost, and a list of items to be included in the order.  
 class OrderRequest {
+    @NotNull // Validation: status is required when creating an order.
     private OrderStatus status;
     private Double packagingCost;
 
@@ -118,6 +130,7 @@ class OrderItemRequest {
     @NotNull
     private Long productId;
 
+    @NotNull  // Validation: quantity is required.
     @Positive 
     private Integer quantity;
 

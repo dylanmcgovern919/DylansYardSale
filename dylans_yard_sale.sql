@@ -47,7 +47,8 @@ CREATE TABLE orders (
   order_date DATETIME NOT NULL,
   packaging_cost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   status ENUM('PROCESSING','SHIPPED','COMPLETED') NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  INDEX idx_orders_status (status) -- Optimizes queries that filter orders by status.
 );
 
 CREATE TABLE order_items (
