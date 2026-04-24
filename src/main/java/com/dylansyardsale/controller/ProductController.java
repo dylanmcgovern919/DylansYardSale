@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Set; // ADDED NOTE: Needed for tags endpoint
+import java.util.Set;
 
 @RestController //MUST- Marks this class as a REST API controller, allowing it to handle HTTP requests and return JSON responses.
 @RequestMapping("/api/products") //MUST-Every route in this controller starts with /api/products.

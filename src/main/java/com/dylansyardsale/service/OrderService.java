@@ -84,7 +84,7 @@ public class OrderService {
             OrderItem item = new OrderItem(); //Connect item to the selected product and back to the parent order
             item.setProduct(product);
             item.setOrder(order);
-            item.setQuantity(itemRequest.getQuantity()); // CHANGED NOTE: quantity now comes from request
+            item.setQuantity(itemRequest.getQuantity());
             items.add(item);
         }
 

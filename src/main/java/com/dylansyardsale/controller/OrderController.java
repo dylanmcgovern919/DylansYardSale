@@ -37,7 +37,7 @@ public class OrderController {
     }
 
     @PostMapping //MUST-Creates a new order in the database and returns the created order.
-    public ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest request) { //DELETE-COMPLEX ORDER CODE SECTION
+    public ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.create(request));
     }
 
