@@ -8,7 +8,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: none #notes: Changed to validate so Hibernate checks schema only and does NOT mutate tables (prevents drift from your SQL file).
+      ddl-auto: none 
     show-sql: true
     properties:
       hibernate:
