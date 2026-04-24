@@ -57,4 +57,11 @@ public class OrderItemController {
         return ResponseEntity.ok(orderItemService.update(orderId, itemId, request));
     }
 
+    //MUST-Deletes one item from a specific order.
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<Void> delete(@PathVariable Long orderId, @PathVariable Long itemId) {
+        orderItemService.delete(orderId, itemId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
