@@ -35,12 +35,18 @@ public class TagService {
 
     @Transactional(readOnly = true)
     public TagResponse findByName(String name) {
-        Tag tag = tagRepository.findByName(name);
+        if (name == null) return null;
+        Tag tag = tagRepository.findByNameIgnoreCase(name.trim());
         return tag != null ? toResponse(tag) : null;
     }
 
     @Transactional
     public TagResponse create(Tag tag) {
+        String normalizedName = normalizeTagName(tag.getName());
+        if (tagRepository.existsByNameIgnoreCase(normalizedName)) {
+            throw new IllegalArgumentException("Tag already exists: " + normalizedName);
+        }
+        tag.setName(normalizedName);
         return toResponse(tagRepository.save(tag));
     }
 
@@ -48,7 +54,15 @@ public class TagService {
     public TagResponse update(Long id, Tag updated) {
         Tag tag = tagRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Tag not found: " + id));
-        tag.setName(updated.getName());
+
+        String normalizedName = normalizeTagName(updated.getName());
+
+        if (!tag.getName().equalsIgnoreCase(normalizedName) &&
+            tagRepository.existsByNameIgnoreCase(normalizedName)) {
+            throw new IllegalArgumentException("Tag already exists: " + normalizedName);
+        }
+
+        tag.setName(normalizedName);
         return toResponse(tagRepository.save(tag));
     }
 
@@ -58,5 +72,12 @@ public class TagService {
             throw new ResourceNotFoundException("Tag not found: " + id);
         }
         tagRepository.deleteById(id);
+    }
+
+    private String normalizeTagName(String name) {
+        if (name == null || name.trim().isBlank()) {
+            throw new IllegalArgumentException("Tag name is required");
+        }
+        return name.trim();
     }
 }

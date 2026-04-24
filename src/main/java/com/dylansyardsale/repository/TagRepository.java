@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 //REQUIRED for CRUD operations on Tag entity
 public interface TagRepository extends JpaRepository<Tag, Long> {
     Tag findByName(String name);
+    Tag findByNameIgnoreCase(String name);
+    boolean existsByNameIgnoreCase(String name);
 }
-

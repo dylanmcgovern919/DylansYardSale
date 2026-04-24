@@ -1,44 +1,59 @@
 package com.dylansyardsale.service;
 
-import com.dylansyardsale.dto.OrderItemRequest;
 import com.dylansyardsale.dto.OrderItemResponse;
 import com.dylansyardsale.dto.OrderRequest;
 import com.dylansyardsale.dto.OrderResponse;
 import com.dylansyardsale.exception.ResourceNotFoundException;
-import com.dylansyardsale.model.*;
+import com.dylansyardsale.model.Order;
+import com.dylansyardsale.model.OrderItem;
+import com.dylansyardsale.model.OrderStatus;
+import com.dylansyardsale.model.Product;
 import com.dylansyardsale.repository.OrderRepository;
 import com.dylansyardsale.repository.ProductRepository;
+
+import jakarta.validation.Valid;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 
-@Service //MUST-Marks this class as a Spring-managed service bean containing business logic for Order operations.
+@Service
+@Validated
 public class OrderService {
     private final OrderRepository orderRepository;
-
-    //Added ProductRepository to look up products when building order items.
     private final ProductRepository productRepository;
 
-    public OrderService(OrderRepository orderRepository, ProductRepository productRepository) {
+    public OrderService (OrderRepository orderRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
     }
 
-    // Converts an Order entity to an OrderResponse DTO to avoid exposing JPA entities and prevent lazy serialization issues.
     private OrderResponse toResponse(Order order) {
         List<OrderItemResponse> itemResponses = order.getItems().stream()
             .map(item -> new OrderItemResponse(
                 item.getId(),
-                item.getProduct().getId(),
-                item.getProduct().getName(),
+                item.getProduct() != null ? item.getProduct().getId() : null,
+                item.getProduct() != null ? item.getProduct().getName() : null,
                 item.getQuantity()
             ))
             .toList();
+
+        BigDecimal packaging = null;
+        if (order.getPackagingCost() != null) {
+            packaging = BigDecimal.valueOf(order.getPackagingCost());
+        }
+
         return new OrderResponse(
-            order.getId(), order.getOrderDate(), order.getStatus(),
-            order.getPackagingCost(), itemResponses
+            order.getId(),
+            order.getOrderDate(),
+            order.getStatus(),
+            packaging,
+            itemResponses
         );
     }
 
@@ -56,7 +71,6 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<OrderResponse> getByStatus(OrderStatus status) {
-        // Added a new filter endpoint so users only get items that match what they choose, instead of getting everything.
         return orderRepository.findAll().stream()
             .filter(o -> o.getStatus() == status)
             .map(this::toResponse)
@@ -65,23 +79,21 @@ public class OrderService {
 
     @Transactional
     public OrderResponse create(OrderRequest request) {
-        // Explicit guard to prevent creating empty orders
         if (request.getItems() == null || request.getItems().isEmpty()) {
             throw new IllegalArgumentException("Order must contain at least one item.");
         }
 
-        Order order = new Order(); //Set the order date to the current date and time when the order is created, and set the status and packaging cost based on the request body.
+        Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
         order.setStatus(request.getStatus());
         order.setPackagingCost(request.getPackagingCost());
 
-        //Logic to map Product IDs to specific OrderItems in the database
         List<OrderItem> items = new ArrayList<>();
-        for (OrderItemRequest itemRequest : request.getItems()) {
+        for (var itemRequest : request.getItems()) {
             Product product = productRepository.findById(itemRequest.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + itemRequest.getProductId()));
 
-            OrderItem item = new OrderItem(); //Connect item to the selected product and back to the parent order
+            OrderItem item = new OrderItem();
             item.setProduct(product);
             item.setOrder(order);
             item.setQuantity(itemRequest.getQuantity());
@@ -93,11 +105,31 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderResponse update(Long id, Order updated) {
+    public OrderResponse update(Long id, @Valid OrderRequest updatedRequest) {
         Order order = orderRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + id));
-        order.setStatus(updated.getStatus());
-        order.setPackagingCost(updated.getPackagingCost());
+
+        order.setStatus(updatedRequest.getStatus());
+        order.setPackagingCost(updatedRequest.getPackagingCost());
+
+        if (updatedRequest.getItems() != null && !updatedRequest.getItems().isEmpty()) {
+            List<OrderItem> items = new ArrayList<>();
+
+            for (var itemRequest : updatedRequest.getItems()) {
+                Product product = productRepository.findById(itemRequest.getProductId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + itemRequest.getProductId()));
+
+                OrderItem item = new OrderItem();
+                item.setProduct(product);
+                item.setOrder(order);
+                item.setQuantity(itemRequest.getQuantity());
+                items.add(item);
+            }
+
+            order.getItems().clear();
+            order.getItems().addAll(items);
+        }
+
         return toResponse(orderRepository.save(order));
     }
 

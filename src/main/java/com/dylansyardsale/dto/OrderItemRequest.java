@@ -5,10 +5,11 @@ import jakarta.validation.constraints.Positive;
 
 // DTO to support quantity per product in order creation
 public class OrderItemRequest {
-    @NotNull
+    @NotNull(message = "productId is required")
     private Long productId;
 
-    @Positive 
+    @NotNull(message = "quantity is required")
+    @Positive(message = "quantity must be greater than 0") 
     private Integer quantity;
 
     public Long getProductId() { return productId; }
