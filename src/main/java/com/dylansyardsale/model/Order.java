@@ -1,5 +1,6 @@
 package com.dylansyardsale.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -28,6 +29,7 @@ public class Order {
 
     // One-to-many: Order -> OrderItem //REQUIRED - Child rows belong to this parent order.
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //REQUIRED - Persist/update/delete OrderItem rows with the parent Order.
+    @JsonManagedReference
     private List<OrderItem> items = new ArrayList<>();
 
     public Order() {} //REQUIRED - Required no-arg constructor for JPA.
