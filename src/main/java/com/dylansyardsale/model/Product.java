@@ -1,6 +1,9 @@
 package com.dylansyardsale.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,16 +13,21 @@ public class Product {
 
     @Id //REQUIRED
     @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED
-    private Long id; //REQUIRED - DB-generated ID for each item 
+    private Long id; //REQUIRED - DB-generated ID for each item
 
-    private String name; //REQUIRED (domain field)
-    private String description; //REQUIRED (domain field)
-    private Double price; //REQUIRED (domain field)
+    @NotBlank(message = "Product name is required")
+    private String name;
 
+    private String description;
+
+    @NotNull(message = "Price is required")
+    @PositiveOrZero(message = "Price must be zero or positive")
+    private Double price;
+
+    @NotNull(message = "Category is required")
     @Enumerated(EnumType.STRING) //REQUIRED
     private ProductCategory category; //REQUIRED
 
-    //Kept because your existing constructor/DataLoader uses genre text.
     private String genre;
 
     // REQUIRED: many-to-many relationship (Product <-> Tag)
@@ -33,7 +41,6 @@ public class Product {
 
     public Product() {} //REQUIRED by JPA
 
-    // Matches your existing DataLoader constructor calls.
     public Product(String name, String description, Double price, ProductCategory category, String genre) {
         this.name = name;
         this.description = description;
@@ -42,7 +49,6 @@ public class Product {
         this.genre = genre;
     }
 
-    // REQUIRED: id getter so API can return item ID
     public Long getId() { return id; }
 
     public String getName() { return name; }
@@ -63,6 +69,4 @@ public class Product {
     // REQUIRED for CRUD on many-to-many relationship
     public Set<Tag> getTags() { return tags; }
     public void setTags(Set<Tag> tags) { this.tags = tags; }
-
-
 }
