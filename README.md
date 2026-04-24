@@ -1,6 +1,6 @@
 # Dylan’s Yard Sale API
 
-This is my Spring Boot backend for a yard-sale style shop where I resell **clothes, records, and comics**.  
+This is my Spring Boot Final Project for a yard-sale style shop where I resell **clothes, records, and comics**.  
 I built this as a REST API project using Java, Spring Boot, and MySQL. It covers all assignment requirements and includes a few extra features I found useful.
 
 ---
