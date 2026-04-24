@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Set; // ADDED NOTE: Needed for tags endpoint
 
 @RestController //MUST- Marks this class as a REST API controller, allowing it to handle HTTP requests and return JSON responses.
 @RequestMapping("/api/products") //MUST-Every route in this controller starts with /api/products.
@@ -64,11 +65,27 @@ public class ProductController {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
 
-        Tag tag = tagRepository.findByName(tagName);
-        if (tag == null) tag = tagRepository.save(new Tag(tagName));
+        // ADDED NOTE: Basic input validation for tagName
+        if (tagName == null || tagName.trim().isEmpty()) {
+            throw new IllegalArgumentException("tagName must not be blank");
+        }
 
-        product.getTags().add(tag);
+        Tag tag = tagRepository.findByName(tagName.trim());
+        if (tag == null) tag = tagRepository.save(new Tag(tagName.trim()));
+
+        // ADDED NOTE: Set prevents duplicates, but this check improves clarity of intent
+        if (!product.getTags().contains(tag)) {
+            product.getTags().add(tag);
+        }
+
         return ResponseEntity.ok(productRepository.save(product));
+    }
+
+    @GetMapping("/{id}/tags") // ADDED NOTE: Added endpoint to retrieve tags for one product
+    public ResponseEntity<Set<Tag>> getProductTags(@PathVariable Long id) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
+        return ResponseEntity.ok(product.getTags());
     }
 
     @DeleteMapping("/{id}/tags/{tagId}") //MUST-Removes a tag from a product. If the product or tag doesn't exist, it throws a custom ResourceNotFoundException.

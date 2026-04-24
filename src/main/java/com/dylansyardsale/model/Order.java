@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
-<<<<<<< HEAD
 // Order is a required entity //REQUIRED - Core business entity representing a customer purchase transaction.
 // Demonstrates one-to-many //REQUIRED - One Order can contain multiple OrderItem rows.
 @Entity //REQUIRED - Marks this class as a JPA entity mapped to a database table.
@@ -17,7 +16,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED - Uses MySQL auto-increment identity strategy.
     private Long id; //REQUIRED - Unique database identifier for each order.
 
-    private String qrCode; //REQUIRED - Demo shipping/tracking identifier shown in API responses.
+    // CHANGED NOTE: qrCode removed to keep id-based flow consistent across model/controller.
     private LocalDateTime orderDate; // Timestamp of when the order was created.
 
     @PositiveOrZero // Validation: packaging cost cannot be negative.
@@ -32,30 +31,6 @@ public class Order {
     private List<OrderItem> items = new ArrayList<>();
 
     public Order() {} //REQUIRED - Required no-arg constructor for JPA.
-=======
-
-@Entity //MUST-Tells JPA this class maps to a database.
-@Table(name = "orders") //MUST-Uses explicit table name to avoid reserved-word and naming issues.
-public class Order {
-    @Id //MUST-Primary key for the orders table.
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //MUST-Auto-increments ID (MYSQL style).
-    private Long id; //REQUIRED - Unique database identifier for each order.
-
-    private LocalDateTime orderDate; // date/time of when the order was created.
-
-    @PositiveOrZero // Extra cost of packaging materials, can't be < 0.
-    private Double packagingCost;
-
-    @NotNull //Every order must have a valid status.
-    @Enumerated(EnumType.STRING) //Stores enum as readable string (PROCESSING/SHIPPED/COMPLETED).
-    private OrderStatus status;
-
-    //MUST-One-to-many relationship: Order - > OrderItems.
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //MUST-If i save/delete an order, it also saves/deletes the associated order items.
-    private List<OrderItem> items = new ArrayList<>();
-
-    public Order() {} //MUST-Required no-arg constructor for JPA.
->>>>>>> 4ed9b39 (update from spring tools)
 
     public Long getId() { return id; }
     public LocalDateTime getOrderDate() { return orderDate; }

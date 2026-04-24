@@ -6,17 +6,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration //MUST-Marks this class as a source of bean definitions for the application context. 
 public class DataLoader {
 
-<<<<<<< HEAD
     // COPILOT NOTE: Removed generateQR() method so Product uses DB-generated id only.
-
-    @Bean //REQUIRED
-=======
-	@Bean //MUST-Defines a bean that Spring will automatically run once the application is starts.
->>>>>>> 4ed9b39 (update from spring tools)
+    @Bean //MUST-Defines a bean that Spring will automatically run once the application starts.
     CommandLineRunner initData(ProductRepository productRepo, TagRepository tagRepo) {
         return args -> { //Lambda expression containing the logic to initialize the database with data when the application starts.
             if (productRepo.count() > 0) return;//Stops execution if the database already has products to prevent duplicate products and tags.
@@ -27,7 +21,7 @@ public class DataLoader {
             Tag stoneIsland = tagRepo.findByName("Stone Island");
             if (stoneIsland == null) stoneIsland = tagRepo.save(new Tag("Stone Island"));
             Tag bandTshirt = tagRepo.findByName("Band Tees");
-            if (bandTshirt == null) bandTshirt = tagRepo.save(new Tag("Band Tshirts"));
+            if (bandTshirt == null) bandTshirt = tagRepo.save(new Tag("Band Tees")); // CHANGED NOTE: normalized saved name to match lookup
             Tag reggae = tagRepo.findByName("Reggae");
             if (reggae == null) reggae = tagRepo.save(new Tag("Reggae"));
             Tag punk = tagRepo.findByName("Punk");
@@ -41,17 +35,6 @@ public class DataLoader {
             Tag image = tagRepo.findByName("Image");
             if (image == null) image = tagRepo.save(new Tag("Image"));
 
-<<<<<<< HEAD
-            // ABOVE AND BEYOND PART: ADDED BY GOOGLE - Automating unique SKU assignment for each initial inventory item
-            // COPILOT NOTE: QR assignment lines removed; database id is now the only identifier.
-            Product p1 = new Product("Vintage Burberry Baseball Hat", "", 45.0, ProductCategory.CLOTHING, null);
-            productRepo.save(p1);
-
-            Product p2 = new Product("Stone Island Black Cargo Pants", "", 98.0, ProductCategory.CLOTHING, null);
-            productRepo.save(p2);
-
-            Product p3 = new Product("Melvins 1993 Houdini Tour T-Shirt", "", 52.0, ProductCategory.CLOTHING, null);
-=======
             //Create products under the categories clothing, records, or comics, and add the appropriate tags to the products before saving them to the database.
             Product p1 = new Product("Vintage Burberry Baseball Hat", "", 45.0, ProductCategory.CLOTHING, null);
             p1.getTags().add(vintage);
@@ -63,7 +46,6 @@ public class DataLoader {
 
             Product p3 = new Product("Melvins 1993 Houdini Tour T-Shirt", "", 52.0, ProductCategory.CLOTHING, null);
             p3.getTags().add(bandTshirt);
->>>>>>> 4ed9b39 (update from spring tools)
             productRepo.save(p3);
 
             Product dekker = new Product("Desmond Dekker / Aces - 007 Shanty Town", "", 42.0, ProductCategory.RECORD, "Reggae");

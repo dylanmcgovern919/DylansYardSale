@@ -1,21 +1,17 @@
 spring:
-  main:
-    web-application-type: servlet # ADDED BY GOOGLE: Forces the web server to stay open
-  
   datasource:
     url: jdbc:mysql://localhost:3306/dylans_yard_sale?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: '349215'
     driver-class-name: com.mysql.cj.jdbc.Driver
-  
+
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none #notes: Changed to validate so Hibernate checks schema only and does NOT mutate tables (prevents drift from your SQL file).
     show-sql: true
     properties:
       hibernate:
-        # REMOVED: MySQL8Dialect (Hibernate 6 handles this automatically)
         format_sql: true
 
 server:
