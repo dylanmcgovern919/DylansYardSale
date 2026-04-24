@@ -64,5 +64,15 @@ public class Product {
     public Set<Tag> getTags() { return tags; }
     public void setTags(Set<Tag> tags) { this.tags = tags; }
 
+    // Helper methods to keep both sides of the many-to-many relationship in sync in memory.
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+        tag.getProducts().add(this);
+    }
+
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
+        tag.getProducts().remove(this);
+    }
 
 }

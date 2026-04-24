@@ -15,6 +15,7 @@ public class Tag {
     private Long id;
 
     @NotBlank
+    @Column(unique = true, nullable = false) // Enforce uniqueness at DB level to prevent duplicate tag names
     private String name;
 
     @JsonIgnore

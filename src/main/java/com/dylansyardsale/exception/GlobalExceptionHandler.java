@@ -1,5 +1,6 @@
 package com.dylansyardsale.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,5 +38,13 @@ public class GlobalExceptionHandler {
         body.put("error", "Invalid request");
         body.put("detail", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class) // handles DB-level unique constraint violations (e.g. duplicate tag name)
+    public ResponseEntity<Map<String, String>> handleDataIntegrity(DataIntegrityViolationException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", "Data conflict");
+        body.put("detail", "A record with that value already exists.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 }

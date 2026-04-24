@@ -8,7 +8,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: none 
+      ddl-auto: none  # Safe default: no schema changes at runtime. Activate 'dev' profile for auto schema update.
     show-sql: true
     properties:
       hibernate:
