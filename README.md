@@ -1,87 +1,140 @@
-# Dylan’s Yard Sale API (Clothes, Records, Comics)
+Dylan’s Yard Sale API (Clothes, Records, Comics)
+Dylan’s Yard Sale is a Spring Boot + JPA REST API for managing resale inventory focused on clothes, records, and comics.
+The API stores data in MySQL, supports CRUD operations, and includes Swagger UI for endpoint testing.
 
-Dylan’s Yard Sale is a Spring Boot + JPA REST API for managing resale inventory focused on **clothes, records, and comics**.  
-The API stores data in **MySQL**, supports CRUD operations, and documents/tests endpoints through Swagger UI.
+This project was built to satisfy the final bootcamp Spring rubric requirements while documenting relationship design and testing evidence directly in the repository.
 
-This project was built to satisfy the final bootcamp Spring rubric requirements while also documenting relationship design and endpoint testing evidence directly in the repository.
+Tech Stack
+Java 21
+Spring Boot 3.3.4
+Spring Data JPA (Hibernate)
+MySQL
+Jakarta Validation
+springdoc OpenAPI / Swagger UI
+What This API Does
+Tracks resale inventory items (products) for clothes, records, and comics.
+Persists data with Spring Data JPA + MySQL.
+Exposes REST endpoints for create/read/update/delete operations.
+Implements one-to-many and many-to-many relationships.
+Provides Swagger UI for interactive testing and grading evidence.
+FINAL PROJECT REQUIREMENTS (Course Rubric)
+This project follows the Spring Boot Web API final-project requirements:
 
----
+Database design contains at least 3 entities and 3 tables
+Contains CRUD operations
+Each entity has at least one CRUD operation
+One or more entities have full CRUD (Create, Read, Update, Delete)
+Contains at least one one-to-many relationship
+Contains at least one many-to-many relationship with one or more CRUD operations on that relationship
+REST Web API server is tested through Swagger/Postman/ARC or a front-end client
+Submission artifacts included in this repo:
 
-## What This API Does
+Source code for all layers (controller, service, repository, entity/model, exception handling)
+SQL files
+ERD/relationship PDFs
+Additional documentation (this README)
+Rubric Alignment (Final Project Requirements)
+1) At least 3 entities and 3 tables ✅
+Implemented entities:
 
-- Tracks resale inventory items (products) for clothes, records, and comics.
-- Persists data with Spring Data JPA + MySQL.
-- Exposes REST endpoints for create/read/update/delete operations.
-- Implements relational database design, including one-to-many and many-to-many relationships.
-- Provides Swagger UI for interactive testing and grading evidence.
+Product
+Tag
+Order
+OrderItem
+Database tables include:
 
----
-
-## ✅ Rubric Requirements: Where They Are Met
-
-### 1) Database design with at least 3 entities / 3 tables
+products
+tags
+orders
+order_items
+product_tags (join table)
 Evidence in repository:
-- [`dylans_yard_sale.sql`](./dylans_yard_sale.sql) (main schema/data)
-- [`product_tags_relationship.sql`](./product_tags_relationship.sql) (relationship data)
-- [`check_database.sql`](./check_database.sql) (database verification queries)
-- [`eer_diagram.pdf`](./eer_diagram.pdf) (ER/EER design evidence)
 
-### 2) Contains CRUD operations
-Evidence in repository:
-- Swagger test screenshots in the repository root show successful reads/creates and validation behavior:
-  - [`correct_post_product_1.png`](./correct_post_product_1.png)
-  - [`correct_post_product_2.png`](./correct_post_product_2.png)
-  - [`correct_post_product_3.png`](./correct_post_product_3.png)
-  - [`get_products.png`](./get_products.png)
-  - [`invalid_post.png`](./invalid_post.png)
-- API is structured as a Spring REST project with JPA-backed persistence ([`src/`](./src/) + [`pom.xml`](./pom.xml)).
+dylans_yard_sale.sql
+product_tags_relationship.sql
+check_database.sql
+eer_diagram.pdf
+2) CRUD operations included ✅
+Each entity has CRUD coverage, and at least one entity has full CRUD.
 
-### 3) Each entity has at least one CRUD operation
-Evidence in repository:
-- SQL schema + relationship scripts and API behavior shown through Swagger evidence indicate entity-level operations are implemented.
-- Relationship-focused scripts/documentation:
-  - [`product_tags_relationship.sql`](./product_tags_relationship.sql)
-  - [`One_to_many.pdf`](./One_to_many.pdf)
-  - [`many_to_many.pdf`](./many_to_many.pdf)
+3) One-to-many relationship ✅
+Order -> OrderItem (@OneToMany / @ManyToOne)
+Evidence:
+One_to_many.pdf
+eer_diagram.pdf
+4) Many-to-many relationship with CRUD on relationship ✅
+Product <-> Tag via product_tags
+Evidence:
+many_to_many.pdf
+product_tags_relationship.sql
+5) REST API tested with Swagger/Postman/ARC ✅
+Swagger UI and endpoint screenshots in repository root:
 
-### 4) At least one entity has all 4 CRUD operations
-Evidence in repository:
-- Product flow is documented through Swagger screenshots (create/read explicitly shown), and project is implemented as a CRUD REST API per assignment structure.
-- Supporting endpoint evidence:
-  - [`correct_post_product_1.png`](./correct_post_product_1.png)
-  - [`get_products.png`](./get_products.png)
+correct_swagger_home.png
+correct_post_product_1.png
+correct_post_product_2.png
+correct_post_product_3.png
+get_products.png
+invalid_post.png
+API Endpoint Coverage
+Product (/api/products)
+POST /api/products
+GET /api/products
+GET /api/products/{id}
+PUT /api/products/{id}
+DELETE /api/products/{id}
+Tag (/api/tags)
+POST /api/tags
+GET /api/tags
+GET /api/tags/{id}
+PUT /api/tags/{id}
+DELETE /api/tags/{id}
+Order (/api/orders)
+POST /api/orders
+GET /api/orders
+GET /api/orders/{id}
+GET /api/orders/status/{status}
+PUT /api/orders/{id}
+DELETE /api/orders/{id}
+OrderItem (nested resource)
+POST /api/orders/{orderId}/items
+GET /api/orders/{orderId}/items
+GET /api/orders/{orderId}/items/{itemId}
+PUT /api/orders/{orderId}/items/{itemId}
+DELETE /api/orders/{orderId}/items/{itemId}
+Product-Tag relationship
+POST /api/products/{id}/tags?tagName=...
+GET /api/products/{id}/tags
+DELETE /api/products/{id}/tags/{tagId}
+Validation and Error Handling
+Validation
+Product: required name, price, category; non-negative price
+Tag: non-blank unique name
+Order: required status, non-negative packagingCost, non-empty items
+Order item request: required productId, positive quantity
+Global Exception Handling
+404: Resource not found
+400: validation errors
+400: malformed JSON / invalid enum
+400: illegal argument / integrity violations
+Swagger / OpenAPI
+Swagger UI URL: http://localhost:8080/swagger-ui/index.html
+Swagger Testing Evidence
+correct_swagger_home.png
+correct_post_product_1.png
+correct_post_product_2.png
+correct_post_product_3.png
+get_products.png
+invalid_post.png
+Database / Submission Artifacts
+Included in repository root:
 
-### 5) At least one one-to-many relationship
-Evidence in repository:
-- [`One_to_many.pdf`](./One_to_many.pdf)
-- ERD/schema artifacts:
-  - [`eer_diagram.pdf`](./eer_diagram.pdf)
-  - [`dylans_yard_sale.sql`](./dylans_yard_sale.sql)
-
-### 6) At least one many-to-many relationship with CRUD on relationship
-Evidence in repository:
-- [`many_to_many.pdf`](./many_to_many.pdf)
-- [`product_tags_relationship.sql`](./product_tags_relationship.sql) (relationship mapping/data support)
-
-### 7) REST API tested using Swagger/Postman/ARC (or frontend)
-Evidence in repository:
-- Swagger UI and endpoint screenshots in repository root:
-  - [`correct_swagger_home.png`](./correct_swagger_home.png)
-  - [`correct_post_product_1.png`](./correct_post_product_1.png)
-  - [`correct_post_product_2.png`](./correct_post_product_2.png)
-  - [`correct_post_product_3.png`](./correct_post_product_3.png)
-  - [`get_products.png`](./get_products.png)
-  - [`invalid_post.png`](./invalid_post.png)
-
----
-
-## API Endpoint Coverage (Rubric Mapping)
-
-> This table maps implemented endpoints to rubric requirements so grading is quick and explicit.
-
-| Entity / Relationship | Endpoint | Method | Requirement Covered |
-|---|---|---|---|
-| Product | `/products` | POST | **Create** operation; contributes to full CRUD on one entity |
-| Product | `/products` | GET | **Read** operation; contributes to full CRUD on one entity |
-| Product | `/products/{id}` | GET | **Read by ID** operation;
-
+dylans_yard_sale.sql (schema + seed data)
+check_database.sql (verification queries)
+product_tags_relationship.sql (relationship checks)
+eer_diagram.pdf
+One_to_many.pdf
+many_to_many.pdf
+Author
+Dylan McGovern
+GitHub: dylanmcgovern919
