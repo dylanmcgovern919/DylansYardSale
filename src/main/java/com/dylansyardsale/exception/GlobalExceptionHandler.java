@@ -49,14 +49,14 @@ public class GlobalExceptionHandler {
             && invalidFormatException.getPath().get(0).getFieldName() != null) {
 
             String fieldName = invalidFormatException.getPath().get(0).getFieldName();
-            String value = invalidFormatException.getValue() == null ? null : invalidFormatException.getValue().toString();
+            String value = invalidFormatException.getValue() == null ? "" : invalidFormatException.getValue().toString();
 
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("status", 400);
             body.put("error", "Validation failed");
 
             Map<String, String> fieldErrors = new LinkedHashMap<>();
-            if (value == null || value.isBlank()) {
+            if (value.isBlank()) {
                 fieldErrors.put(fieldName, fieldName + " is required");
             } else {
                 String allowedValues = Arrays.stream(invalidFormatException.getTargetType().getEnumConstants())
