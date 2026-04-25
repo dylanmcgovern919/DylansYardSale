@@ -95,16 +95,17 @@ This is a Spring Boot + JPA + MySQL REST API that supports full CRUD across the 
 
 ---
 
-## API additions beyond minimum rubric requirements
+## Additional API features (NOT required by rubric)
 
-- **DTO-based API responses** (`ProductResponse`, `TagResponse`, `OrderResponse`, `OrderItemResponse`) to avoid exposing JPA entities directly.
-- **Global exception handling** (`GlobalExceptionHandler`) with structured JSON errors for validation, not found, malformed payload, and constraint issues.
-- **Order status filtering endpoint**:
+- **DTO-based responses** (`ProductResponse`, `TagResponse`, `OrderResponse`, `OrderItemResponse`) so entities are not exposed directly.
+- **Global exception handler** with consistent JSON errors for validation, bad JSON, invalid parameters, not found, and DB constraint issues.
+- **Order status filter endpoint**:
   - `GET /api/orders/status/{status}`
-- **Validation-first request models**:
-  - Quantity > 0, non-empty order items, required fields
-- **Optional seed data profile** (`dev-seed`) via `DataLoader`.
-- **OpenAPI metadata customization** in `OpenApiConfig`.
+- **Nested order item endpoints** under `/api/orders/{orderId}/items/*` for cleaner parent-child API design.
+- **Request validation rules** (non-empty order items, quantity > 0, required fields, non-negative packaging cost).
+- **Case-insensitive tag attach behavior** when adding tags to products.
+- **Optional `dev-seed` startup profile** (`DataLoader`) for local sample data bootstrapping.
+- **Custom OpenAPI metadata configuration** in `OpenApiConfig`.
 
 ---
 
