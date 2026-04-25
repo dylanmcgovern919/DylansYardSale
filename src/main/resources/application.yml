@@ -8,8 +8,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: none  # Safe default: no schema changes at runtime. Activate 'dev' profile for auto schema update.
-    show-sql: true
+      ddl-auto: none 
     properties:
       hibernate:
         format_sql: true
@@ -21,4 +20,13 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
-    path: /swagger-ui.html
+    path: /swagger-ui/index.html
+
+# OpenAPI metadata displayed in Swagger UI (title/version/description)
+info:
+  #  this sets the Swagger page title text
+  title: Dylan's Yard Sale
+
+  version: 1.0.0
+
+  description: API for Dylan's Yard Sale

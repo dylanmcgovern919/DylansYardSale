@@ -1,6 +1,4 @@
 # Dev profile: enables Hibernate to auto-update schema (creates/updates tables on startup).
-# Run with: --spring.profiles.active=dev or -Dspring.profiles.active=dev
-# NOTE: Do not use ddl-auto=create in production — this will drop and recreate tables and destroy data.
 spring:
   jpa:
     hibernate:
