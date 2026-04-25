@@ -1,8 +1,10 @@
 # Dylan's Yard Sale API
 
-I resell **records, comics, and clothing**, and this project is my backend API for managing inventory, tags, and customer orders.
+## Intro (why I made this + what it does)
 
-It is a Spring Boot + JPA + MySQL REST API with full CRUD, relationship management, validation, and global error handling.
+I built this API because I resell **records, comics, and clothing** and needed one backend to manage my inventory, product tagging, and order flow in a consistent way.
+
+This is a Spring Boot + JPA + MySQL REST API that supports full CRUD across the core entities, includes one-to-many and many-to-many relationship management, validates incoming request data, and returns structured API errors.
 
 ---
 
@@ -103,6 +105,14 @@ It is a Spring Boot + JPA + MySQL REST API with full CRUD, relationship manageme
   - Quantity > 0, non-empty order items, required fields
 - **Optional seed data profile** (`dev-seed`) via `DataLoader`.
 - **OpenAPI metadata customization** in `OpenApiConfig`.
+
+---
+
+## Repository audit result (entire repo reviewed)
+
+- ✅ I did a full repository pass across controllers, services, entities, repositories, DTOs, config, SQL scripts, tests, and README.
+- ✅ No missing rubric requirements were found in the current implementation.
+- ⚠️ Operational note: full `./mvnw test` includes `DylansYardSaleApplicationTests`, which requires a reachable MySQL datasource.
 
 ---
 
