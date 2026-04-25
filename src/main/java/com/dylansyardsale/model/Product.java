@@ -1,6 +1,9 @@
 package com.dylansyardsale.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,14 +15,20 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED
     private Long id; //REQUIRED - DB-generated ID for each item 
 
+    @NotBlank(message = "name is required")
     private String name; //REQUIRED (domain field)
+    @NotBlank(message = "description is required")
     private String description; //REQUIRED (domain field)
+    @NotNull(message = "price is required")
+    @DecimalMin(value = "0.01", message = "price must be greater than 0")
     private Double price; //REQUIRED (domain field)
 
     @Enumerated(EnumType.STRING) //REQUIRED
+    @NotNull(message = "category is required")
     private ProductCategory category; //REQUIRED
 
     //Kept because your existing constructor/DataLoader uses genre text.
+    @NotBlank(message = "genre is required")
     private String genre;
 
     // REQUIRED: many-to-many relationship (Product <-> Tag)

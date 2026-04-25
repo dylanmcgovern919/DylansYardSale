@@ -16,8 +16,10 @@ import java.util.Set;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @WebMvcTest(ProductController.class)
 @Import(GlobalExceptionHandler.class)
@@ -48,5 +50,29 @@ class ProductControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("Product not found: 999"));
+    }
+
+    @Test
+    void create_returnsValidationErrors_whenPayloadInvalid() throws Exception {
+        String invalidPayload = """
+                {
+                  "name": "",
+                  "description": "Invalid product used to demonstrate validation",
+                  "price": -5.0,
+                  "category": "",
+                  "genre": ""
+                }
+                """;
+
+        mockMvc.perform(post("/api/products")
+                        .contentType(APPLICATION_JSON)
+                        .content(invalidPayload))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Validation failed"))
+                .andExpect(jsonPath("$.fields.name").value("name is required"))
+                .andExpect(jsonPath("$.fields.price").value("price must be greater than 0"))
+                .andExpect(jsonPath("$.fields.category").value("category is required"))
+                .andExpect(jsonPath("$.fields.genre").value("genre is required"));
     }
 }
