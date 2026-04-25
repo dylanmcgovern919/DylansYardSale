@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-//MUST-Provides business logic for OrderItem CRUD operations scoped to a parent Order.
+// Provides business logic for OrderItem CRUD operations scoped to a parent Order.
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
 
@@ -32,7 +32,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         this.productRepository = productRepository;
     }
 
-    //MUST-Returns all items for a given order.
+    // Returns all items for a given order.
     @Override
     @Transactional(readOnly = true)
     public List<OrderItemResponse> getAllByOrder(Long orderId) {
@@ -43,7 +43,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .toList();
     }
 
-    //MUST-Returns one item for a given order.
+    // Returns one item for a given order.
     @Override
     @Transactional(readOnly = true)
     public OrderItemResponse getOne(Long orderId, Long itemId) {
@@ -53,7 +53,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         return toResponse(item);
     }
 
-    //MUST-Creates one item under a given order.
+    // Creates one item under a given order.
     @Override
     @Transactional
     public OrderItemResponse create(Long orderId, OrderItemRequest request) {
@@ -72,7 +72,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         return toResponse(saved);
     }
 
-    //MUST-Updates one item under a given order.
+    // Updates one item under a given order.
     @Override
     @Transactional
     public OrderItemResponse update(Long orderId, Long itemId, OrderItemRequest request) {
@@ -91,7 +91,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         return toResponse(saved);
     }
 
-    //MUST-Deletes one item under a given order.
+    // Deletes one item under a given order.
     @Override
     @Transactional
     public void delete(Long orderId, Long itemId) {
@@ -103,7 +103,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItemRepository.delete(item);
     }
 
-    //MUST-Maps OrderItem entity to OrderItemResponse DTO.
+    // Maps OrderItem entity to OrderItemResponse DTO.
     private OrderItemResponse toResponse(OrderItem item) {
         return new OrderItemResponse(
                 item.getId(),
@@ -113,7 +113,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         );
     }
 
-    //MUST-Validates parent order existence for nested endpoints.
+    // Validates parent order existence for nested endpoints.
     private void ensureOrderExists(Long orderId) {
         if (!orderRepository.existsById(orderId)) {
             throw new ResourceNotFoundException("Order not found with id " + orderId);

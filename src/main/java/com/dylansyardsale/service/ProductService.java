@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service //MUST-Marks this class as a Spring-managed service bean containing business logic for Product operations.
+@Service // Marks this class as a Spring-managed service bean containing business logic for Product operations.
 public class ProductService {
     private final ProductRepository productRepository; //Use these to talk to the database and perform CRUD operations on products and tags.
     private final TagRepository tagRepository;
