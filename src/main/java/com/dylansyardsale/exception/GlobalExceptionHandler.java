@@ -1,7 +1,10 @@
 package com.dylansyardsale.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +41,34 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> handleBadJson(HttpMessageNotReadableException ex) {
+        Throwable cause = ex.getMostSpecificCause();
+        if (cause instanceof InvalidFormatException invalidFormatException
+            && invalidFormatException.getTargetType() != null
+            && invalidFormatException.getTargetType().isEnum()
+            && !invalidFormatException.getPath().isEmpty()
+            && invalidFormatException.getPath().get(0).getFieldName() != null) {
+
+            String fieldName = invalidFormatException.getPath().get(0).getFieldName();
+            String value = invalidFormatException.getValue() == null ? null : invalidFormatException.getValue().toString();
+
+            Map<String, Object> body = new LinkedHashMap<>();
+            body.put("status", 400);
+            body.put("error", "Validation failed");
+
+            Map<String, String> fieldErrors = new LinkedHashMap<>();
+            if (value == null || value.trim().isEmpty()) {
+                fieldErrors.put(fieldName, fieldName + " is required");
+            } else {
+                String allowedValues = Arrays.stream(invalidFormatException.getTargetType().getEnumConstants())
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", "));
+                fieldErrors.put(fieldName, "must be one of: " + allowedValues);
+            }
+
+            body.put("fields", fieldErrors);
+            return ResponseEntity.badRequest().body(body);
+        }
+
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("status", 400);
         body.put("error", "Malformed JSON or invalid enum value");
