@@ -123,9 +123,8 @@ This still provides CRUD coverage for `OrderItem` within the Order workflow:
 
 Swagger/OpenAPI was used to test API endpoints during development.
 
-### Links
-- Swagger UI: `http://localhost:8080/swagger-ui.html`
-- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+### Link
+- **Swagger UI:** `http://localhost:8080/swagger-ui.html`
 
 ### Screenshots
 - ![Swagger UI Home](docs/screenshots/swagger-home.png)
@@ -147,7 +146,6 @@ Swagger/OpenAPI was used to test API endpoints during development.
 After starting the Spring Boot application, open:
 
 - **Swagger UI:** `http://localhost:8080/swagger-ui.html`
-- **OpenAPI JSON:** `http://localhost:8080/v3/api-docs`
 
 Use Swagger UI to view and test all endpoints directly in the browser.
 
