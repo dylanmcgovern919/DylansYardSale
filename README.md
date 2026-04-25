@@ -153,11 +153,11 @@ It is a Spring Boot + JPA + MySQL REST API with full CRUD, relationship manageme
 Create a database named:
 - `dylans_yard_sale`
 
-Set environment variables (recommended):
-- `DB_URL` (optional; defaults to local `dylans_yard_sale`)
-- `DB_USERNAME` (optional; default `root`)
-- `DB_PASSWORD` (optional; default empty)
-- `SERVER_PORT` (optional; default `8080`)
+Use the default `application.yml` datasource values:
+- URL: `jdbc:mysql://localhost:3306/dylans_yard_sale?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true`
+- Username: `root`
+- Password: `349215`
+- Server port: `8080`
 
 ### 3) Start the API
 From repo root:
@@ -202,7 +202,6 @@ Optional seed data:
 
 ## Notes from project review/refactor pass
 
-- Removed hardcoded database password from config and moved to environment-variable based configuration.
 - Tightened one-to-many lifecycle handling so replacing order items cleanly removes orphaned child rows.
 - Improved tag attachment flow to use case-insensitive lookup before creating tags.
 

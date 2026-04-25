@@ -40,10 +40,12 @@ public class Order {
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
     public List<OrderItem> getItems() { return items; }
+    // Replaces all existing items for this order; with orphanRemoval=true this will remove old child rows.
     public void setItems(List<OrderItem> items) {
+        List<OrderItem> newItems = (items != null) ? new ArrayList<>(items) : new ArrayList<>();
         this.items.clear();
-        if (items != null) {
-            items.forEach(this::addItem);
+        for (OrderItem item : newItems) {
+            addItem(item);
         }
     }
 
