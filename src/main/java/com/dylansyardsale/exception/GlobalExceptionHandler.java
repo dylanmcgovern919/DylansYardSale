@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
             body.put("error", "Validation failed");
 
             Map<String, String> fieldErrors = new LinkedHashMap<>();
-            if (value == null || value.trim().isEmpty()) {
+            if (value == null || value.isBlank()) {
                 fieldErrors.put(fieldName, fieldName + " is required");
             } else {
                 String allowedValues = Arrays.stream(invalidFormatException.getTargetType().getEnumConstants())
