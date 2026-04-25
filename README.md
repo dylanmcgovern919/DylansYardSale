@@ -175,21 +175,6 @@ Included in repository root:
 
 ---
 
-## Branch Workflow (Minimal)
-
-Use the smallest practical setup:
-- `main` for stable code
-- one short-lived work branch for the current task
-
-Suggested branch names:
-- `feature/order-validation`
-- `fix/tag-update-endpoint`
-- `docs/readme-cleanup`
-
-Keep each branch focused on one task, open a PR, merge, then delete the branch.
-
----
-
 ## Author
 **Dylan McGovern**
 
