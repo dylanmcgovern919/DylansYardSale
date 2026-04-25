@@ -81,7 +81,27 @@ Evidence in repository:
 
 | Entity / Relationship | Endpoint | Method | Requirement Covered |
 |---|---|---|---|
-| Product | `/products` | POST | **Create** operation; contributes to full CRUD on one entity |
-| Product | `/products` | GET | **Read** operation; contributes to full CRUD on one entity |
-| Product | `/products/{id}` | GET | **Read by ID** operation;
-
+| Product | `/api/products` | POST | **Create** operation; part of full CRUD on Product |
+| Product | `/api/products` | GET | **Read** all products; part of full CRUD on Product |
+| Product | `/api/products/{id}` | GET | **Read by ID**; part of full CRUD on Product |
+| Product | `/api/products/{id}` | PUT | **Update** operation; part of full CRUD on Product |
+| Product | `/api/products/{id}` | DELETE | **Delete** operation; part of full CRUD on Product |
+| Product–Tag relationship | `/api/products/{id}/tags` | GET | **Read** relationship data (many-to-many) |
+| Product–Tag relationship | `/api/products/{id}/tags?tagName={name}` | POST | **Create** relationship (many-to-many CRUD) |
+| Product–Tag relationship | `/api/products/{id}/tags/{tagId}` | DELETE | **Delete** relationship (many-to-many CRUD) |
+| Tag | `/api/tags` | POST | **Create** operation; entity CRUD coverage |
+| Tag | `/api/tags` | GET | **Read** all tags; entity CRUD coverage |
+| Tag | `/api/tags/{id}` | GET | **Read by ID**; entity CRUD coverage |
+| Tag | `/api/tags/{id}` | PUT | **Update** operation; entity CRUD coverage |
+| Tag | `/api/tags/{id}` | DELETE | **Delete** operation; entity CRUD coverage |
+| Order | `/api/orders` | POST | **Create** operation; entity CRUD coverage |
+| Order | `/api/orders` | GET | **Read** all orders; entity CRUD coverage |
+| Order | `/api/orders/{id}` | GET | **Read by ID**; entity CRUD coverage |
+| Order | `/api/orders/status/{status}` | GET | **Read/filter** operation; additional read coverage |
+| Order | `/api/orders/{id}` | PUT | **Update** operation; entity CRUD coverage |
+| Order | `/api/orders/{id}` | DELETE | **Delete** operation; entity CRUD coverage |
+| Order Item (Order → Items) | `/api/orders/{orderId}/items` | POST | **Create** in one-to-many relationship |
+| Order Item (Order → Items) | `/api/orders/{orderId}/items` | GET | **Read** all items for an order (one-to-many) |
+| Order Item (Order → Items) | `/api/orders/{orderId}/items/{itemId}` | GET | **Read by ID** in one-to-many relationship |
+| Order Item (Order → Items) | `/api/orders/{orderId}/items/{itemId}` | PUT | **Update** in one-to-many relationship |
+| Order Item (Order → Items) | `/api/orders/{orderId}/items/{itemId}` | DELETE | **Delete** in one-to-many relationship |
