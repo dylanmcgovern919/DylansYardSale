@@ -35,7 +35,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOne(id));
     }
 
-    // Filter endpoint so users only get items that match what they choose, instead of getting everything.
+    // Filters orders so users only get items that match what they choose.
     @GetMapping("/status/{status}")
     public ResponseEntity<List<OrderResponse>> getByStatus(@PathVariable String status) {
         OrderStatus parsedStatus;

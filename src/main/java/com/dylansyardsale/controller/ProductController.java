@@ -51,7 +51,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.addTag(id, tagName));
     }
 
-    @GetMapping("/{id}/tags") // endpoint to retrieve tags for one product
+    @GetMapping("/{id}/tags") // Retrieves tags for one product.
     public ResponseEntity<Set<TagResponse>> getProductTags(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductTags(id));
     }
