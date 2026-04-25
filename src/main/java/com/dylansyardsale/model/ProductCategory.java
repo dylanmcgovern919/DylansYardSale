@@ -11,6 +11,10 @@ public enum ProductCategory {
         if (value == null || value.trim().isEmpty()) {
             return null;
         }
-        return ProductCategory.valueOf(value.trim().toUpperCase());
+        try {
+            return ProductCategory.valueOf(value.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
     }
 }
