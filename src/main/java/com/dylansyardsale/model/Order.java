@@ -7,14 +7,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
- //REQUIRED - Core business entity representing a customer purchase transaction.
- //REQUIRED - One Order can contain multiple OrderItem rows.
-@Entity //REQUIRED - Marks this class as a JPA entity mapped to a database table.
-@Table(name = "orders") //REQUIRED - Uses explicit table name to avoid reserved-word and naming issues.
+ // Core business entity representing a customer purchase transaction.
+ // One Order can contain multiple OrderItem rows.
+@Entity // Marks this class as a JPA entity mapped to a database table.
+@Table(name = "orders") // Uses explicit table name to avoid reserved-word and naming issues.
 public class Order {
-    @Id //REQUIRED - Primary key for the orders table.
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED - Uses MySQL auto-increment identity strategy.
-    private Long id; //REQUIRED - Unique database identifier for each order.
+    @Id // Primary key for the orders table.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Uses MySQL auto-increment identity strategy.
+    private Long id; // Unique database identifier for each order.
 
     
     private LocalDateTime orderDate; // Timestamp of when the order was created.
@@ -26,11 +26,11 @@ public class Order {
     @Enumerated(EnumType.STRING) // Stores enum as readable string (PROCESSING/SHIPPED/COMPLETED).
     private OrderStatus status;
 
-    // One-to-many: Order -> OrderItem //REQUIRED - Child rows belong to this parent order.
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //REQUIRED - Persist/update/delete OrderItem rows with the parent Order.
+    // One-to-many: Order -> OrderItem // Child rows belong to this parent order.
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true) // Persist/update/delete OrderItem rows with the parent Order.
     private List<OrderItem> items = new ArrayList<>();
 
-    public Order() {} //REQUIRED - Required no-arg constructor for JPA.
+    public Order() {} // Required no-arg constructor for JPA.
 
     public Long getId() { return id; }
     public LocalDateTime getOrderDate() { return orderDate; }

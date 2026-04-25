@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-@Service //MUST-Marks this class as a Spring-managed service bean containing business logic for Tag operations.
+@Service // Marks this class as a Spring-managed service bean containing business logic for Tag operations.
 public class TagService {
     private final TagRepository tagRepository; // Repository for database access
 

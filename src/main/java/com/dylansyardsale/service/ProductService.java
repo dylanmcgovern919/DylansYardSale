@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service //MUST-Marks this class as a Spring-managed service bean containing business logic for Product operations.
+@Service // Marks this class as a Spring-managed service bean containing business logic for Product operations.
 public class ProductService {
     private final ProductRepository productRepository; //Use these to talk to the database and perform CRUD operations on products and tags.
     private final TagRepository tagRepository;
@@ -81,7 +81,7 @@ public class ProductService {
             throw new IllegalArgumentException("tagName must not be blank");
         }
 
-        Tag tag = tagRepository.findByName(tagName.trim());
+        Tag tag = tagRepository.findByNameIgnoreCase(tagName.trim());
         if (tag == null) tag = tagRepository.save(new Tag(tagName.trim()));
 
         //Set to stop duplicates, and this extra check just makes it more clear what I'm trying to do.

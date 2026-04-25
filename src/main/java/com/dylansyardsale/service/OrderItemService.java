@@ -4,7 +4,7 @@ import com.dylansyardsale.dto.OrderItemRequest;
 import com.dylansyardsale.dto.OrderItemResponse;
 import java.util.List;
 
-//MUST-Declares business operations for OrderItem CRUD under an Order.
+// Declares business operations for OrderItem CRUD under an Order.
 public interface OrderItemService {
     List<OrderItemResponse> getAllByOrder(Long orderId);
     OrderItemResponse getOne(Long orderId, Long itemId);

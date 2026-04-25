@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RestController //MUST-Tells Spring this class handles REST API requests and returns JSON responses.
-@RequestMapping("/api/tags") //MUST-Base URL so every endpoint here starts with /api/tags.
+@RestController // Tells Spring this class handles REST API requests and returns JSON responses.
+@RequestMapping("/api/tags") // Base URL so every endpoint here starts with /api/tags.
 public class TagController {
     private final TagService tagService; //Delegates all business logic to the tag service layer.
 
@@ -18,27 +18,27 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @GetMapping //MUST-Gets all tags from the database and returns them as a list.
+    @GetMapping // Gets all tags from the database and returns them as a list.
     public ResponseEntity<List<TagResponse>> getAll() {
         return ResponseEntity.ok(tagService.getAll());
     }
 
-    @GetMapping("/{id}") //MUST-Gets one tag by ID.
+    @GetMapping("/{id}") // Gets one tag by ID.
     public ResponseEntity<TagResponse> getOne(@PathVariable Long id) {
         return ResponseEntity.ok(tagService.getOne(id));
     }
 
-    @PostMapping //MUST-Creates a new tag.
+    @PostMapping // Creates a new tag.
     public ResponseEntity<TagResponse> create(@Valid @RequestBody Tag tag) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tagService.create(tag));
     }
 
-    @PutMapping("/{id}") //MUST-Updates an existing tag.
+    @PutMapping("/{id}") // Updates an existing tag.
     public ResponseEntity<TagResponse> update(@PathVariable Long id, @Valid @RequestBody Tag updated) {
         return ResponseEntity.ok(tagService.update(id, updated));
     }
 
-    @DeleteMapping("/{id}") //MUST-Deletes a tag by ID. 
+    @DeleteMapping("/{id}") // Deletes a tag by ID. 
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         tagService.delete(id);
         return ResponseEntity.noContent().build();

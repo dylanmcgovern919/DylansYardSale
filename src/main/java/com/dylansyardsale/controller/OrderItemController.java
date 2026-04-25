@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//MUST-Marks this class as a REST API controller for nested OrderItem endpoints under orders.
+// Marks this class as a REST API controller for nested OrderItem endpoints under orders.
 @RestController
-//MUST-Defines the base URL for order-item endpoints.
+// Defines the base URL for order-item endpoints.
 @RequestMapping("/api/orders/{orderId}/items")
 public class OrderItemController {
 
@@ -24,19 +24,19 @@ public class OrderItemController {
         this.orderItemService = orderItemService;
     }
 
-    //MUST-Gets all items for a specific order.
+    // Gets all items for a specific order.
     @GetMapping
     public ResponseEntity<List<OrderItemResponse>> getAllByOrder(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderItemService.getAllByOrder(orderId));
     }
 
-    //MUST-Gets one item by orderId + itemId.
+    // Gets one item by orderId + itemId.
     @GetMapping("/{itemId}")
     public ResponseEntity<OrderItemResponse> getOne(@PathVariable Long orderId, @PathVariable Long itemId) {
         return ResponseEntity.ok(orderItemService.getOne(orderId, itemId));
     }
 
-    //MUST-Creates a new item in a specific order.
+    // Creates a new item in a specific order.
     @PostMapping
     public ResponseEntity<OrderItemResponse> create(
             @PathVariable Long orderId,
@@ -47,7 +47,7 @@ public class OrderItemController {
                 .body(orderItemService.create(orderId, request));
     }
 
-    //MUST-Updates quantity/product for one item in a specific order.
+    // Updates quantity/product for one item in a specific order.
     @PutMapping("/{itemId}")
     public ResponseEntity<OrderItemResponse> update(
             @PathVariable Long orderId,
@@ -57,7 +57,7 @@ public class OrderItemController {
         return ResponseEntity.ok(orderItemService.update(orderId, itemId, request));
     }
 
-    //MUST-Deletes one item from a specific order.
+    // Deletes one item from a specific order.
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Void> delete(@PathVariable Long orderId, @PathVariable Long itemId) {
         orderItemService.delete(orderId, itemId);

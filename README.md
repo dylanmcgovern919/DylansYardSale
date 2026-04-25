@@ -1,157 +1,144 @@
 # Dylan's Yard Sale API
 
-A Spring Boot REST API for managing products, tags, and customer orders for a vintage/resale style shop.
+Spring Boot REST API for products, tags, orders, and order items for a vintage/resale shop.
 
-Built with:
+## Tech Stack
 - Java 21
-- Spring Boot 3
+- Spring Boot 3.3.4
 - Spring Data JPA (Hibernate)
 - MySQL
-- Spring Validation
-- Swagger / OpenAPI (springdoc)
+- Jakarta Validation
+- springdoc OpenAPI / Swagger UI
 
 ---
 
-## Project Summary
+## FINAL PROJECT REQUIREMENTS (Course Rubric)
 
-This project implements a REST Web API server using JPA with:
-- Multiple entities and database tables
-- Full CRUD operations
-- One-to-many and many-to-many relationships
-- Validation and global exception handling
-- Swagger documentation for endpoint testing
+This project follows the Spring Boot Web API final-project requirements:
 
----
+- Database design contains at least 3 entities and 3 tables
+- Contains CRUD operations
+- Each entity has at least one CRUD operation
+- One or more entities have full CRUD (Create, Read, Update, Delete)
+- Contains at least one one-to-many relationship
+- Contains at least one many-to-many relationship with one or more CRUD operations on that relationship
+- REST Web API server is tested through Swagger/Postman/ARC or a front-end client
 
-## Database / Entity Design
-
-### Entities
-1. **Product**
-2. **Tag**
-3. **Order**
-4. **OrderItem**
-
-### Relationships
-- **One-to-Many**: `Order` → `OrderItem`
-- **Many-to-Many**: `Product` ↔ `Tag` (via `product_tags` join table)
+Submission artifacts included in this repo:
+- Source code for all layers (controller, service, repository, entity/model, exception handling)
+- SQL files
+- ERD/relationship PDFs
+- Additional documentation (this README)
 
 ---
 
-## CRUD Coverage
+## Rubric Alignment (Final Project Requirements)
 
-### Product (`/api/products`)
-- **Create**: `POST /api/products`
-- **Read**: `GET /api/products`, `GET /api/products/{id}`
-- **Update**: `PUT /api/products/{id}`
-- **Delete**: `DELETE /api/products/{id}`
+### 1) At least 3 entities and 3 tables ✅
+Implemented entities:
+1. `Product`
+2. `Tag`
+3. `Order`
+4. `OrderItem`
 
-### Tag (`/api/tags`)
-- **Create**: `POST /api/tags`
-- **Read**: `GET /api/tags`, `GET /api/tags/{id}`
-- **Update**: `PUT /api/tags/{id}`
-- **Delete**: `DELETE /api/tags/{id}`
+Database tables include:
+- `products`
+- `tags`
+- `orders`
+- `order_items`
+- `product_tags` (join table)
 
-### Order (`/api/orders`)
-- **Create**: `POST /api/orders`
-- **Read**: `GET /api/orders`, `GET /api/orders/{id}`, `GET /api/orders/status/{status}`
-- **Update**: `PUT /api/orders/{id}`
-- **Delete**: `DELETE /api/orders/{id}`
+### 2) CRUD coverage ✅
+Each entity has CRUD coverage, and multiple entities have full CRUD.
 
-### Relationship CRUD (Product-Tags)
-- **Add Tag to Product**: `POST /api/products/{id}/tags?tagName=...`
-- **Get Product Tags**: `GET /api/products/{id}/tags`
-- **Remove Tag from Product**: `DELETE /api/products/{id}/tags/{tagId}`
+#### Product (`/api/products`)
+- `POST /api/products`
+- `GET /api/products`
+- `GET /api/products/{id}`
+- `PUT /api/products/{id}`
+- `DELETE /api/products/{id}`
 
-### OrderItem Design (Nested Resource via Orders)
+#### Tag (`/api/tags`)
+- `POST /api/tags`
+- `GET /api/tags`
+- `GET /api/tags/{id}`
+- `PUT /api/tags/{id}`
+- `DELETE /api/tags/{id}`
 
-`OrderItem` is implemented as a child entity of `Order` and is intentionally managed through `/api/orders` endpoints rather than standalone `/api/order-items` endpoints.
-
-This still provides CRUD coverage for `OrderItem` within the Order workflow:
-
-- **Create OrderItem(s)**: `POST /api/orders` using `items` in the request body  
-- **Read OrderItem(s)**: `GET /api/orders` and `GET /api/orders/{id}` (items returned inside each order)  
-- **Update OrderItem(s)**: `PUT /api/orders/{id}` with updated `items`  
-- **Delete OrderItem(s)**: `DELETE /api/orders/{id}` (cascades to `order_items`)
-
----
-
-## Rubric Requirements Checklist
-
-### ✅ 1-person project requirements
-- [x] Database design contains at least 3 entities and 3 tables  
-- [x] Contains CRUD operations  
-- [x] Each entity has at least one CRUD operation  
-- [x] At least one entity has all 4 CRUD operations (Product, Tag, and Order each do)  
-- [x] Contains at least one one-to-many relationship (`Order` → `OrderItem`)  
-- [x] Contains at least one many-to-many relationship with CRUD operations (`Product` ↔ `Tag`)  
-- [x] REST Web API server tested via Swagger/Postman/ARC  
-
----
-
-## Extra Features
-
-- **Global exception handling** with standardized error responses:
-  - `ResourceNotFoundException` → 404
-  - Validation failures → 400
-  - Illegal arguments → 400
-
-- **Input validation** using Jakarta Validation:
-  - Non-empty order item list
-  - Required product IDs
-  - Positive item quantity
-  - Non-negative packaging cost
-  - Required order status
-  - Non-blank tag names
-
-- **Order creation with line-item quantities**
-  - Uses `OrderItemRequest` DTO for product + quantity in each order item
-
-- **Status-based order filtering**
-  - `GET /api/orders/status/{status}`
-
-- **Tag duplicate guard**
-  - Prevents duplicate tag creation by name in controller logic
-
-- **Seed data profile**
-  - `DataLoader` runs only in `dev-seed` profile to avoid duplicate seeding in normal runs
-
-- **OpenAPI / Swagger UI integration** for interactive API testing
-
----
-
-## Swagger Evidence
-
-Swagger/OpenAPI was used to test API endpoints during development.
-
-### Link
-- **Swagger UI:** `http://localhost:8080/swagger-ui.html`
-
-### Screenshots
-- ![Swagger UI Home](docs/screenshots/swagger-home.png)
-- ![Successful POST Product](docs/screenshots/swagger-post-product-success.png)
-- ![GET Products Response](docs/screenshots/swagger-get-products.png)
-- ![Validation Error 400](docs/screenshots/swagger-validation-400.png)
-
-### Verified in Swagger
-- Product CRUD (`/api/products`)
-- Tag CRUD (`/api/tags`)
-- Order CRUD (`/api/orders`)
-- Product-Tag relationship endpoints
+#### Order (`/api/orders`)
+- `POST /api/orders`
+- `GET /api/orders`
+- `GET /api/orders/{id}`
 - `GET /api/orders/status/{status}`
+- `PUT /api/orders/{id}`
+- `DELETE /api/orders/{id}`
+
+#### OrderItem (nested resource)
+- `POST /api/orders/{orderId}/items`
+- `GET /api/orders/{orderId}/items`
+- `GET /api/orders/{orderId}/items/{itemId}`
+- `PUT /api/orders/{orderId}/items/{itemId}`
+- `DELETE /api/orders/{orderId}/items/{itemId}`
+
+### 3) One-to-many relationship ✅
+- `Order` -> `OrderItem` (`@OneToMany` / `@ManyToOne`)
+
+### 4) Many-to-many relationship with CRUD on relationship ✅
+- `Product` <-> `Tag` via `product_tags`
+- Relationship endpoints:
+  - `POST /api/products/{id}/tags?tagName=...`
+  - `GET /api/products/{id}/tags`
+  - `DELETE /api/products/{id}/tags/{tagId}`
+
+### 5) REST API testing evidence (Swagger) ✅
+Swagger/OpenAPI used to test endpoints during development.
 
 ---
 
-## How to Access the API (Swagger)
+## Validation and Error Handling
 
-After starting the Spring Boot application, open:
+### Validation
+- Product: required `name`, `price`, `category`; non-negative `price`
+- Tag: non-blank unique `name`
+- Order: required `status`, required non-negative `packagingCost`, non-empty `items`
+- Order item request: required `productId`, positive `quantity`
 
-- **Swagger UI:** `http://localhost:8080/swagger-ui.html`
-
-Use Swagger UI to view and test all endpoints directly in the browser.
+### Global Exception Handling
+- 404: `ResourceNotFoundException`
+- 400: validation errors (`MethodArgumentNotValidException`)
+- 400: malformed JSON / invalid enum
+- 400: illegal argument / integrity violations
 
 ---
 
-## Example JSON Requests (aligned with current seed data)
+## Swagger / OpenAPI
+
+### URL
+- `http://localhost:8080/swagger-ui/index.html`
+
+### Swagger Screenshots
+- ![invalid-post-1](https://github.com/user-attachments/assets/38743bbd-4321-4756-8db8-3286775e53da)
+- ![swagger-2](https://github.com/user-attachments/assets/20c0834b-8ae1-47c6-a712-0c6a1e217c58)
+- ![swagger-3](https://github.com/user-attachments/assets/300a5b57-4be8-458e-be1c-b8ead0287aef)
+- ![swagger-4](https://github.com/user-attachments/assets/e1cf77d2-5747-4fb3-a1da-df2997a57f08)
+- ![get-products](https://github.com/user-attachments/assets/adb39e52-0a3f-4bf7-bdd6-8a745d722ddd)
+- ![swagger-home-correct](https://github.com/user-attachments/assets/7b2b9c3d-69e8-4b21-b26f-63cbcd8269ca)
+- ![invalid-post](https://github.com/user-attachments/assets/0057e580-df42-4fbc-934c-725a070b7788)
+
+---
+
+## Database / Submission Artifacts
+Included in repository root:
+- `dylans_yard_sale.sql` (schema + seed data)
+- `check_database.sql` (verification queries)
+- `product_tags_relationship.sql` (relationship checks)
+- `eer_diagram.pdf`
+- `One_to_many.pdf`
+- `many_to_many.pdf`
+
+---
+
+## Example Requests
 
 ### Create Product
 `POST /api/products`
@@ -159,7 +146,7 @@ Use Swagger UI to view and test all endpoints directly in the browser.
 {
   "name": "Bad Brains - Rock for Light",
   "description": "Original pressing hardcore LP",
-  "price": 38.00,
+  "price": 38.0,
   "category": "RECORD",
   "genre": "Punk"
 }
@@ -178,7 +165,7 @@ Use Swagger UI to view and test all endpoints directly in the browser.
 ```json
 {
   "status": "PROCESSING",
-  "packagingCost": 2.50,
+  "packagingCost": 2.5,
   "items": [
     { "productId": 1, "quantity": 1 },
     { "productId": 12, "quantity": 1 }
@@ -189,6 +176,6 @@ Use Swagger UI to view and test all endpoints directly in the browser.
 ---
 
 ## Author
+**Dylan McGovern**
 
-**Dylan McGovern**  
 GitHub: [dylanmcgovern919](https://github.com/dylanmcgovern919)

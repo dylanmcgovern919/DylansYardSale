@@ -1,37 +1,45 @@
 package com.dylansyardsale.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity //REQUIRED
-@Table(name = "products") //REQUIRED
+@Entity
+@Table(name = "products")
 public class Product {
 
-    @Id //REQUIRED
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //REQUIRED
-    private Long id; //REQUIRED - DB-generated ID for each item 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // DB-generated ID for each item 
 
-    private String name; //REQUIRED (domain field)
-    private String description; //REQUIRED (domain field)
-    private Double price; //REQUIRED (domain field)
+    @NotBlank(message = "name is required")
+    private String name; // (domain field)
+    private String description; // (domain field)
 
-    @Enumerated(EnumType.STRING) //REQUIRED
-    private ProductCategory category; //REQUIRED
+    @NotNull(message = "price is required")
+    @DecimalMin(value = "0.0", inclusive = true, message = "price must be non-negative")
+    private Double price; // (domain field)
+
+    @NotNull(message = "category is required")
+    @Enumerated(EnumType.STRING)
+    private ProductCategory category;
 
     //Kept because your existing constructor/DataLoader uses genre text.
     private String genre;
 
-    // REQUIRED: many-to-many relationship (Product <-> Tag)
-    @ManyToMany //REQUIRED
-    @JoinTable( //REQUIRED
-        name = "product_tags", //REQUIRED (join table)
-        joinColumns = @JoinColumn(name = "product_id"), //REQUIRED
-        inverseJoinColumns = @JoinColumn(name = "tag_id") //REQUIRED
+    // many-to-many relationship (Product <-> Tag)
+    @ManyToMany
+    @JoinTable(
+        name = "product_tags", // (join table)
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private Set<Tag> tags = new HashSet<>(); //REQUIRED
+    private Set<Tag> tags = new HashSet<>();
 
-    public Product() {} //REQUIRED by JPA
+    public Product() {} // by JPA
 
     // Matches your existing DataLoader constructor calls.
     public Product(String name, String description, Double price, ProductCategory category, String genre) {
@@ -42,7 +50,7 @@ public class Product {
         this.genre = genre;
     }
 
-    // REQUIRED: id getter so API can return item ID
+    // id getter so API can return item ID
     public Long getId() { return id; }
 
     public String getName() { return name; }
@@ -60,7 +68,7 @@ public class Product {
     public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
 
-    // REQUIRED for CRUD on many-to-many relationship
+    // for CRUD on many-to-many relationship
     public Set<Tag> getTags() { return tags; }
     public void setTags(Set<Tag> tags) { this.tags = tags; }
 

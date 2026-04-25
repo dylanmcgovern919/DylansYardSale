@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-//MUST-Marks this class as a REST API controller
+// Marks this class as a REST API controller
 @RestController
-//MUST-Defines the base URL for all end points in this controller, which will be /api/orders
+// Defines the base URL for all end points in this controller, which will be /api/orders
 @RequestMapping("/api/orders")
 public class OrderController {
     //Delegates all business logic to the order service layer.
@@ -23,13 +23,13 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    //MUST-Gets all orders from the database and returns every order in the database.
+    // Gets all orders from the database and returns every order in the database.
     @GetMapping
     public ResponseEntity<List<OrderResponse>> getAll() {
         return ResponseEntity.ok(orderService.getAll());
     }
 
-    //MUST-Gets a single order by its ID, and returns the order if found.
+    // Gets a single order by its ID, and returns the order if found.
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOne(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOne(id));
@@ -47,19 +47,19 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getByStatus(parsedStatus));
     }
 
-    //MUST-Creates a new order in the database and returns the created order.
+    // Creates a new order in the database and returns the created order.
     @PostMapping
     public ResponseEntity<OrderResponse> create(@Valid @RequestBody OrderRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.create(request));
     }
 
-    //MUST-Updates an existing order by its ID, and returns the updated order if found.
+    // Updates an existing order by its ID, and returns the updated order if found.
     @PutMapping("/{id}")
     public ResponseEntity<OrderResponse> update(@PathVariable Long id, @Valid @RequestBody OrderRequest updatedRequest) {
         return ResponseEntity.ok(orderService.update(id, updatedRequest));
     }
 
-    //MUST-Deletes an order by its ID.
+    // Deletes an order by its ID.
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderService.delete(id);

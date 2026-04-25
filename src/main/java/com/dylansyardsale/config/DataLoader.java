@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile; 
 
-@Configuration //MUST-Marks this class as a source of bean definitions for the application context.
+@Configuration // Marks this class as a source of bean definitions for the application context.
 public class DataLoader {
 
-    @Bean //MUST-Defines a bean that Spring will automatically run once the application starts.
+    @Bean // Defines a bean that Spring will automatically run once the application starts.
     @Profile("dev-seed") //Prevents duplicate seed data 
     CommandLineRunner initData(ProductRepository productRepo, TagRepository tagRepo) {
         return args -> { //Lambda expression containing the logic to initialize the database with data when the application starts.
