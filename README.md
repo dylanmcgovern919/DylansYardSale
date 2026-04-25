@@ -62,6 +62,17 @@ This project implements a REST Web API server using JPA with:
 - **Get Product Tags**: `GET /api/products/{id}/tags`
 - **Remove Tag from Product**: `DELETE /api/products/{id}/tags/{tagId}`
 
+### OrderItem Design (Nested Resource via Orders)
+
+`OrderItem` is implemented as a child entity of `Order` and is intentionally managed through `/api/orders` endpoints rather than standalone `/api/order-items` endpoints.
+
+This still provides CRUD coverage for `OrderItem` within the Order workflow:
+
+- **Create OrderItem(s)**: `POST /api/orders` using `items` in the request body  
+- **Read OrderItem(s)**: `GET /api/orders` and `GET /api/orders/{id}` (items returned inside each order)  
+- **Update OrderItem(s)**: `PUT /api/orders/{id}` with updated `items`  
+- **Delete OrderItem(s)**: `DELETE /api/orders/{id}` (cascades to `order_items`)
+
 ---
 
 ## Rubric Requirements Checklist
@@ -105,6 +116,29 @@ This project implements a REST Web API server using JPA with:
   - `DataLoader` runs only in `dev-seed` profile to avoid duplicate seeding in normal runs
 
 - **OpenAPI / Swagger UI integration** for interactive API testing
+
+---
+
+## Swagger Evidence
+
+Swagger/OpenAPI was used to test API endpoints during development.
+
+### Links
+- Swagger UI: `http://localhost:8080/swagger-ui.html`
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+
+### Screenshots
+- ![Swagger UI Home](docs/screenshots/swagger-home.png)
+- ![Successful POST Product](docs/screenshots/swagger-post-product-success.png)
+- ![GET Products Response](docs/screenshots/swagger-get-products.png)
+- ![Validation Error 400](docs/screenshots/swagger-validation-400.png)
+
+### Verified in Swagger
+- Product CRUD (`/api/products`)
+- Tag CRUD (`/api/tags`)
+- Order CRUD (`/api/orders`)
+- Product-Tag relationship endpoints
+- `GET /api/orders/status/{status}`
 
 ---
 
