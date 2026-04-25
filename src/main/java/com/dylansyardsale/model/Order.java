@@ -27,7 +27,7 @@ public class Order {
     private OrderStatus status;
 
     // One-to-many: Order -> OrderItem //REQUIRED - Child rows belong to this parent order.
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //REQUIRED - Persist/update/delete OrderItem rows with the parent Order.
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true) //REQUIRED - Persist/update/delete OrderItem rows with the parent Order.
     private List<OrderItem> items = new ArrayList<>();
 
     public Order() {} //REQUIRED - Required no-arg constructor for JPA.
@@ -40,5 +40,20 @@ public class Order {
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
     public List<OrderItem> getItems() { return items; }
-    public void setItems(List<OrderItem> items) { this.items = items; }
+    public void setItems(List<OrderItem> items) {
+        this.items.clear();
+        if (items != null) {
+            items.forEach(this::addItem);
+        }
+    }
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+    }
+
+    public void removeItem(OrderItem item) {
+        items.remove(item);
+        item.setOrder(null);
+    }
 }

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 
@@ -88,19 +87,16 @@ public class OrderService {
         order.setStatus(request.getStatus());
         order.setPackagingCost(request.getPackagingCost());
 
-        List<OrderItem> items = new ArrayList<>();
         for (var itemRequest : request.getItems()) {
             Product product = productRepository.findById(itemRequest.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + itemRequest.getProductId()));
 
             OrderItem item = new OrderItem();
             item.setProduct(product);
-            item.setOrder(order);
             item.setQuantity(itemRequest.getQuantity());
-            items.add(item);
+            order.addItem(item);
         }
 
-        order.setItems(items);
         return toResponse(orderRepository.save(order));
     }
 
@@ -113,21 +109,16 @@ public class OrderService {
         order.setPackagingCost(updatedRequest.getPackagingCost());
 
         if (updatedRequest.getItems() != null && !updatedRequest.getItems().isEmpty()) {
-            List<OrderItem> items = new ArrayList<>();
-
+            order.getItems().clear();
             for (var itemRequest : updatedRequest.getItems()) {
                 Product product = productRepository.findById(itemRequest.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + itemRequest.getProductId()));
 
                 OrderItem item = new OrderItem();
                 item.setProduct(product);
-                item.setOrder(order);
                 item.setQuantity(itemRequest.getQuantity());
-                items.add(item);
+                order.addItem(item);
             }
-
-            order.getItems().clear();
-            order.getItems().addAll(items);
         }
 
         return toResponse(orderRepository.save(order));

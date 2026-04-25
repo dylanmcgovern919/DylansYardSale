@@ -81,8 +81,9 @@ public class ProductService {
             throw new IllegalArgumentException("tagName must not be blank");
         }
 
-        Tag tag = tagRepository.findByName(tagName.trim());
-        if (tag == null) tag = tagRepository.save(new Tag(tagName.trim()));
+        String normalizedName = tagName.trim();
+        Tag tag = tagRepository.findByNameIgnoreCase(normalizedName);
+        if (tag == null) tag = tagRepository.save(new Tag(normalizedName));
 
         //Set to stop duplicates, and this extra check just makes it more clear what I'm trying to do.
         product.addTag(tag); // use helper method for bidirectional consistency
