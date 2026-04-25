@@ -151,17 +151,17 @@ Use Swagger UI to view and test all endpoints directly in the browser.
 
 ---
 
-## Example JSON Requests
+## Example JSON Requests (aligned with current seed data)
 
 ### Create Product
 `POST /api/products`
 ```json
 {
-  "name": "Vintage Denim Jacket",
-  "description": "1980s washed denim jacket",
-  "price": 79.99,
-  "category": "CLOTHING",
-  "genre": null
+  "name": "Bad Brains - Rock for Light",
+  "description": "Original pressing hardcore LP",
+  "price": 38.00,
+  "category": "RECORD",
+  "genre": "Punk"
 }
 ```
 
@@ -169,7 +169,7 @@ Use Swagger UI to view and test all endpoints directly in the browser.
 `POST /api/tags`
 ```json
 {
-  "name": "Vintage"
+  "name": "Hardcore"
 }
 ```
 
@@ -178,10 +178,10 @@ Use Swagger UI to view and test all endpoints directly in the browser.
 ```json
 {
   "status": "PROCESSING",
-  "packagingCost": 2.99,
+  "packagingCost": 2.50,
   "items": [
-    { "productId": 1, "quantity": 2 },
-    { "productId": 2, "quantity": 1 }
+    { "productId": 1, "quantity": 1 },
+    { "productId": 12, "quantity": 1 }
   ]
 }
 ```
