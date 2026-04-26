@@ -1,0 +1,5 @@
+# Dev profile: enables Hibernate to auto-update schema (creates/updates tables on startup).
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
